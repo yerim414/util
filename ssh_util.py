@@ -69,7 +69,7 @@ class SSHClient:
         return result
 
     # NOTE : prompt는 list 로 받아 여러 ssh 환경에서 확인 할수 있도록
-    def receive_check(self, prompt: str = "#", timeout: int = TIMEOUT) -> str:
+    def receive_check(self, prompt: list = ["#", ">"], timeout: int = TIMEOUT) -> str:
         """
         프롬프트 입력줄이 나올때 까지의 입력을 기다립니다.
         """

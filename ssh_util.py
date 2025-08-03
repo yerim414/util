@@ -4,7 +4,6 @@ import paramiko
 TIMEOUT = 10 # seconds
 
 class SSHClient:
-    """ A class to handle SSH connections """
     def __init__(self, host:str, username:str, password:str, port:int =22, encoding = "utf-8"):
         self.host = host
         self.username = username
@@ -15,9 +14,7 @@ class SSHClient:
         self.channel = None
 
     def connect(self):
-        """
-        ssh 연결을 수행합니다.
-        
+        """ssh 연결
         """
         try:
             self.client = paramiko.SSHClient()
@@ -51,6 +48,14 @@ class SSHClient:
             self.channel = None
 
     def execute_command(self, commands:list) -> list[str]:
+        """명령어를 전송하여 결과를 반환합니다.
+
+        Args:
+            commands (list): 실행하고자 하는 명령어 목록
+
+        Returns:
+            list[str]: 명령 실행 결과
+        """
         if self.client is None:
             print("연결되어 있지 않음")
             return None
@@ -68,10 +73,18 @@ class SSHClient:
 
         return result
 
-    # NOTE : prompt는 list 로 받아 여러 ssh 환경에서 확인 할수 있도록
     def receive_check(self, prompt: list = ["#", ">"], timeout: int = TIMEOUT) -> str:
-        """
-        프롬프트 입력줄이 나올때 까지의 입력을 기다립니다.
+        """프롬프트 입력줄이 나올 때 까지 출력을 기다립니다.
+
+        Args:
+            prompt (list, optional): ssh 환경별 명령 프롬프트 구분자. Defaults to ["#", ">"].
+            timeout (int, optional): 대기시간. Defaults to TIMEOUT.
+
+        Raises:
+            TimeoutError: 응답 대기 시간 초과
+
+        Returns:
+            str: 수신된 출력 결과
         """
         output = ""
         end_time = time.time() + timeout
